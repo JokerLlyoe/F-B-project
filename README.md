@@ -1,20 +1,20 @@
 # F&B Ordering System
 A scalable REST API for food & beverage ordering built with NestJS, TypeScript, PostgreSQL, TypeORM, and RabbitMQ.
 
-## Assestment
+# Assestment
 
-# 1. API contract decisions: What was one non-obvious design decision you made in the API surface — a naming choice, a response shape, a status code — and why did you make it?
+1. API contract decisions: What was one non-obvious design decision you made in the API surface — a naming choice, a response shape, a status code — and why did you make it?
 -	Path versioning e.g. (GET /v1/menu)
 -	Standard status code for conflict during update status is response code 409 from HTTP spec. Ref (https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/409 )
 - Use bigDecmial in price calculation and adding
 
-# 2. Versioning: If a mobile client were already consuming GET /menu and you needed to change the response shape in a breaking way, how would you handle that? 
+2. Versioning: If a mobile client were already consuming GET /menu and you needed to change the response shape in a breaking way, how would you handle that? 
 -	Production is using versioning of GET /v1/menu. Branch out and make changes in v2 folder and create another GET/v2/menu. We will just need to deployed the latest version to production after SIT and UAT.
 
-# 3. What you'd do differently with more time: Name one thing you would change or add if you had another two hours. Be specific. 
+3. What you'd do differently with more time: Name one thing you would change or add if you had another two hours. Be specific. 
 -	If there is another two hours, I would like to improve the order processing by introducing Redis alongside RabbitMq. Redis can solve different problem like accidentally submitted same order for multiple times due to network retries or repeated button taps. Redis has distributed lock that can prevent multiple same order event. Redis Zset to schedule for expiration logic. Redis processing speed is faster for frequently accessed reference data. RabbitMq is more towards asynchronous workflow.
 
-# 4. Production gap: What is the most significant thing missing from this service that would concern you before shipping it to real users?
+4. Production gap: What is the most significant thing missing from this service that would concern you before shipping it to real users?
 -	Duplicate orders from same customer
 -	Data consistency/asynchronous. E.g. 2 orders for last item at same time. Redis and DB with quantity mismatch.
 -	Failure recovery. System crashes. 
