@@ -6,7 +6,7 @@ A scalable REST API for food & beverage ordering built with NestJS, TypeScript, 
 1. API contract decisions: What was one non-obvious design decision you made in the API surface — a naming choice, a response shape, a status code — and why did you make it?
 -	Path versioning e.g. (GET /v1/menu)
 -	Standard status code for conflict during update status is response code 409 from HTTP spec. Ref (https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/409 )
-- Use bigDecmial in price calculation and adding
+- Use BigDecimal (big.js) in price calculation and adding
 
 2. Versioning: If a mobile client were already consuming GET /menu and you needed to change the response shape in a breaking way, how would you handle that? 
 -	Production is using versioning of GET /v1/menu. Branch out and make changes in v2 folder and create another GET/v2/menu. We will just need to deployed the latest version to production after SIT and UAT.
@@ -61,7 +61,7 @@ npm run migration:run
 
 ### 5. Seed Database (Optional)
 ```bash
-node seed-coffee-shop.js
+npm run seed:coffee
 ```
 
 ## RabbitMQ Setup
@@ -107,16 +107,17 @@ npm run start
 ?category=<uuid>          # Filter by category ID  
 ?search=<term>            # Search name/description
 ```
-#### GET `/api/v1/menu/:id` - Get specific menu item
+#### GET `/api/v1/menu/items/:id` - Get specific menu item
 ```bash
-GET /api/v1/menu/uuid
+GET /api/v1/menu/items/uuid
 ```
-#### PATCH `/api/v1/menu/:id` - Update menu item
+#### PATCH `/api/v1/menu/items/:id` - Update menu item
 ```bash
-PATCH /api/v1/menu/uuid
+PATCH /api/v1/menu/items/uuid
 {
   "name": "Updated Name",
-  "price": 10.00,
+  "price": "10.00",
+  "stockCount": 20,
   "isAvailable": false
 }
 ```
@@ -157,7 +158,7 @@ GET /api/v1/orders/uuid
 
 #### PATCH `/api/v1/orders/:id/status` - Update order status
 ```bash
-PATCH /api/v1/orders/uuid
+PATCH /api/v1/orders/uuid/status
 {
   "status": "preparing"
 }
